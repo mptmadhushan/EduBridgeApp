@@ -14,7 +14,6 @@ import {
 import Voice from 'react-native-voice';
 import {images, SIZES, COLORS, FONTS} from '../helpers';
 import Tts from 'react-native-tts';
-
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import bg1 from '../assets/1.png';
@@ -93,7 +92,7 @@ const VoiceScreen = ({navigation}) => {
       axios
         .post(apiUrl, postData)
         .then(response => {
-          Tts.speak('Hello, this is a test of Text-to-Speech in React Native.');
+          Tts.speak(response.data);
 
           // Handle the response here
           console.log('API Response:', response.data);
@@ -272,7 +271,6 @@ const VoiceScreen = ({navigation}) => {
                 {isListening ? 'Stop Listening' : 'Start Listening'}
               </Text>
             </TouchableOpacity>
-          </View>
           <TouchableOpacity
             style={styles.buttonStyle}
             onPress={() => {
@@ -287,6 +285,8 @@ const VoiceScreen = ({navigation}) => {
             }}>
             <Text style={styles.buttonTextStyle}>Quiz</Text>
           </TouchableOpacity>
+          </View>
+
         </KeyboardAvoidingView>
       </ScrollView>
       <View style={styles.bottomButtons}>

@@ -33,7 +33,7 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Login"
         screenOptions={{
           headerShown: TapGestureHandler,
         }}>

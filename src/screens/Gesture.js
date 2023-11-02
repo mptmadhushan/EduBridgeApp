@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { RNCamera } from 'react-native-camera';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {RNCamera} from 'react-native-camera';
 import Spinner from 'react-native-loading-spinner-overlay';
 import * as ImagePicker from 'react-native-image-picker';
 import axios from 'axios';
 
-const MainScreen = ({ routes, navigation }) => {
+const MainScreen = ({routes, navigation}) => {
   let camera;
   const [loading, setLoading] = useState(false);
 
@@ -26,14 +26,14 @@ const MainScreen = ({ routes, navigation }) => {
       };
       const data = await camera.takePictureAsync(options);
       const baseImage = data.base64;
-      
+
       let formData = new FormData();
       formData.append('image', {
         uri: data.uri,
         type: 'image/jpg',
         name: 'image.jpg',
       });
-      
+
       const apiUrl = 'http://10.0.2.2:5002/recognize_hand_post'; // Replace with your API endpoint URL
 
       try {
@@ -92,7 +92,11 @@ const MainScreen = ({ routes, navigation }) => {
           }}
         />
       </View>
-      <Spinner visible={loading} textContent={'Loading...'} textStyle={styles.spinnerText} />
+      <Spinner
+        visible={loading}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerText}
+      />
       <TouchableOpacity onPress={takePicture} style={styles.captureButton}>
         <Text style={styles.captureText}>Capture</Text>
       </TouchableOpacity>

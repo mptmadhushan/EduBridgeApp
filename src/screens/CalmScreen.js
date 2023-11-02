@@ -16,11 +16,11 @@ export default function OnBoard({ navigation, route }) {
   const [currentVideoId, setCurrentVideoId] = useState(null);
 
   const videoData = [
-    { title: 'Video 1', videoId: 'OYA-dtPXQL8' },
-    { title: 'Video 2', videoId: 'ZppkntzMD3U' },
-    { title: 'Video 3', videoId: 'S8tZN-EW6Xk' },
-    { title: 'Video 4', videoId: 'AI_aWUOdo8Y' },
-    { title: 'Video 5', videoId: 'zSPxMJH-RSs' },
+    { title: 'Journey to the magic garden meditation', videoId: 'OYA-dtPXQL8' },
+    { title: 'Eye Relaxation', videoId: 'ZppkntzMD3U' },
+    { title: 'Focus check', videoId: 'S8tZN-EW6Xk' },
+    { title: 'Therapy Music', videoId: 'AI_aWUOdo8Y' },
+    { title: 'Sleep Music', videoId: 'zSPxMJH-RSs' },
   ];
 
   const playVideo = (videoId) => {
@@ -47,6 +47,7 @@ export default function OnBoard({ navigation, route }) {
       </LinearGradient>
 
       <ScrollView>
+        <View style={{alignItems:'center'}}>
         {videoData.map((item, index) => (
           <TouchableOpacity
             key={index}
@@ -56,6 +57,7 @@ export default function OnBoard({ navigation, route }) {
             <Text style={styles.cardTitle}>{item.title}</Text>
           </TouchableOpacity>
         ))}
+        </View>
 
         {currentVideoId && (
           <Youtube VideoId={currentVideoId} onClose={stopVideo} />

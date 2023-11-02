@@ -99,7 +99,7 @@ export default function Home({ navigation }) {
                 }}
                 source={require('../assets/icons/sound.png')}
               />
-              <Text style={styles.text001}>Emotion Report</Text>
+              <Text style={styles.text001}>Emotion</Text>
             </View>
           </TouchableOpacity>
         </View>

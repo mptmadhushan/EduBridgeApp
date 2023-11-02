@@ -46,6 +46,7 @@ export default function OnBoard({navigation}) {
       console.error('Error retrieving notes from AsyncStorage:', error);
     }
   };
+  const [timer, setTimer] = useState(0)
   useEffect(() => {
     const timerInterval = setInterval(() => {
       setTimer((prevTimer) => prevTimer + 1);
