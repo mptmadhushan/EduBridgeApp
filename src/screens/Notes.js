@@ -1,26 +1,36 @@
 import React, {useState, useEffect} from 'react';
+
 import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Text,Image,
-  ImageBackground,ScrollView
+  Text,
+  Image,
+  ImageBackground,
+  ScrollView,
 } from 'react-native';
-import {icons, images, SIZES, COLORS, FONTS} from '../helpers';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import {icons, images, SIZES, COLORS, FONTS} from '../helpers';
+import BottomTabsView from '../components/bottomTabs';
 import LinearGradient from 'react-native-linear-gradient';
-export default function OnBoard({navigation, route}) {
-  // const {resData} = route.params;
+export default function MoreInfo({navigation, route}) {
+  const [notes, setNotes] = useState([]);
+
   const result = {
     symptoms: [
-     
-     'Cupidatat a voluptate.',,
-     'Cupidatat a voluptate.',
-     'Cupidatat a voluptate.','•Quis adipisicing quis ut veniam ad occaecat laboris esse exercitation proident.',
-     
-     'Cupidatat a voluptate.',,
-     'Cupidatat a voluptate.',
-     'Cupidatat a voluptate.',
+      '•Quis adipisicing quis ut veniam ad occaecat laboris esse exercitation proident.',
+
+      'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',
+      ,
+      'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',
+      'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',
+      '•Quis adipisicing quis ut veniam ad occaecat laboris esse exercitation proident.',
+
+      'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',
+      ,
+      'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',
+      'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',
     ],
     solutions: [
       'Aute dolore consectetur dolore',
@@ -30,99 +40,76 @@ export default function OnBoard({navigation, route}) {
   useEffect(() => {
 
     // Retrieve existing notes and reminders from AsyncStorage when the component mounts
-    getReminders();
- 
+    getNotes();
+
   }, []);
-  const [reminders, setReminders] = useState([]);
-
-  // const result = resData.result.detail;
-  // console.log('hello from res', resData);
-
-  const getReminders = async () => {
+  const getNotes = async () => {
     try {
-      const savedReminders = await AsyncStorage.getItem('reminders');
-      if (savedReminders) {
-        setReminders(JSON.parse(savedReminders));
+      const savedNotes = await AsyncStorage.getItem('notes');
+      if (savedNotes) {
+        setNotes(JSON.parse(savedNotes));
         console.log(
-          'Retrieved reminders from AsyncStorage:',
-          JSON.parse(savedReminders),
+          'Retrieved notes from AsyncStorage:',
+          JSON.parse(savedNotes),
         );
       }
     } catch (error) {
-      console.error('Error retrieving reminders from AsyncStorage:', error);
+      console.error('Error retrieving notes from AsyncStorage:', error);
     }
   };
   return (
-    <View
-      style={styles.container}
-      source={require('../assets/cocoOnb.jpg')}>
+    <View style={styles.container} source={require('../assets/cocoOnb.jpg')}>
       <LinearGradient
-      start={{x: 0, y: 0}} end={{x: 1, y: 0}} 
-        colors={[COLORS.black, COLORS.secondary,]}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        colors={[COLORS.black, COLORS.secondary]}
         style={styles.overlay}>
-        {/* <Text style={styles.title1}>
-          "Protect your Palms: Uncovering Coconut Diseases to Preserve Your
-          Paradise."
-        </Text> */}
+
         <View
           style={{
             alignItems: 'center',
-            // marginTop: SIZES.height * 0.04,
-            // maxHeight: 50,
+      
           }}>
-                 <Text style={styles.title}>Your Reminders</Text>
-
+          <Text style={styles.title}>Your Notes</Text>
         </View>
       </LinearGradient>
-        <ScrollView >
+      <ScrollView>
         <View style={{alignItems: 'center', paddingHorizontal: 20}}>
-          {reminders &&
-            reminders?.map(list => (
+          {notes &&
+            notes?.map(list => (
               <Text style={styles.des} key={list.index}>
-                {list.text} {'\n'} Date : Sat Oct 29 2022 {'\n'} Time : 02:05:51
+                {list.text}
               </Text>
             ))}
-          {/* <Text style={styles.title}>Solutions</Text> */}
-          {/* 
-          {result.solutions &&
-            result.solutions.map(list => ( */}
-          {/* <Text style={styles.des}>
-            Overall, incorporating coconut into your diet and beauty routine can
-            have many health and beauty benefits.
-          </Text> */}
-          {/* // ))} */}
+       
         </View>
-
-
-        </ScrollView>
-        <View style={styles.bottomButtons}>
+      </ScrollView>
+      <View style={styles.bottomButtons}>
         <TouchableOpacity
           style={styles.bottomButton}
           onPress={() => {
-            navigation.navigate('Home')
+            navigation.navigate('Home');
           }}>
           <Text style={styles.bottomButtonText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.bottomButton}
           onPress={() => {
-           navigation.navigate('Reminders')
+            navigation.navigate('Reminders');
           }}>
           <Text style={styles.bottomButtonText}>Reminders</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.bottomButton}
           onPress={() => {
-            navigation.navigate('More')
-
+            navigation.navigate('More');
           }}>
           <Text style={styles.bottomButtonText}>Notes</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.bottomButton}
           onPress={() => {
-            navigation.navigate('Home')
-
+            navigation.navigate('Home');
           }}>
           <Text style={styles.bottomButtonText}>Help</Text>
         </TouchableOpacity>
@@ -139,9 +126,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: SIZES.height * 0.25,
-    marginBottom:100,
-    padding:30
-
+    marginBottom: 100,
+    padding: 30,
+  },
+  bottomButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  bottomButton: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 10,
+    padding: 10,
+    width: '25%',// Distribute equally among four buttons
+    alignItems: 'center',
+  },
+  bottomButtonText: {
+    color: COLORS.white,
   },
   btn: {
     backgroundColor: COLORS.primary,
@@ -191,20 +192,5 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     marginBottom: 10,
-  },
-  bottomButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  bottomButton: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 10,
-    padding: 10,
-    width: '25%',// Distribute equally among four buttons
-    alignItems: 'center',
-  },
-  bottomButtonText: {
-    color: COLORS.white,
   },
 });

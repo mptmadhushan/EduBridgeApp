@@ -6,12 +6,23 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   ScrollView,
+  Button,
   Image,
   TextInput,
+  StyleSheet,
 } from 'react-native';
 import Voice from 'react-native-voice';
+import {images, SIZES, COLORS, FONTS} from '../helpers';
+import Tts from 'react-native-tts';
+
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
+import bg1 from '../assets/1.png';
+import bg2 from '../assets/2.png';
+import bg3 from '../assets/3.png';
+import bg4 from '../assets/4.png';
+import bg45 from '../assets/icons/loginback.png';
+const backgroundImages = [bg1, bg2, bg3, bg4];
 
 const VoiceScreen = ({navigation}) => {
   const [isListening, setIsListening] = useState(false);
@@ -21,14 +32,25 @@ const VoiceScreen = ({navigation}) => {
   const [newNote, setNewNote] = useState('');
   const [reminders, setReminders] = useState([]);
   const [newReminder, setNewReminder] = useState('');
-
+  const [backgroundImage, setBackgroundImage] = useState(bg45);
+  const openWebView = () => {
+    navigation.navigate('WebView', {url: 'https://www.google.com'}); // Replace with the URL you want to open
+  };
   useEffect(() => {
     Voice.onSpeechResults = onSpeechResults;
 
     // Retrieve existing notes and reminders from AsyncStorage when the component mounts
     getNotes();
     getReminders();
+    Tts.setDefaultLanguage('en-US');
+    Tts.setDefaultRate(0.5);
+    Tts.setDefaultPitch(1.5);
 
+    // Clean up TTS when component unmounts
+    return () => {
+      Tts.stop();
+      Tts.shutdown();
+    };
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
@@ -40,9 +62,7 @@ const VoiceScreen = ({navigation}) => {
 
     const createNoteIndex = spokenText.indexOf('create new note');
     const createReminderIndex = spokenText.indexOf('create new reminder');
-    const changeThemeIndex =
-      spokenText.indexOf('change appearance') ||
-      spokenText.indexOf('change color');
+    const changeThemeIndex = spokenText.indexOf('change appearance');
 
     if (createNoteIndex !== -1) {
       const noteText = spokenText
@@ -58,19 +78,23 @@ const VoiceScreen = ({navigation}) => {
       saveReminder(reminderText);
     } else if (changeThemeIndex !== -1) {
       console.log('Changing theme');
-      // Implement the code to change the theme here
+      const randomIndex = Math.floor(Math.random() * backgroundImages.length);
+      setBackgroundImage(backgroundImages[randomIndex]);
     } else {
-      const apiUrl = 'http://10.0.2.2:5002/chatbot';
+      const apiUrl = 'http://172.20.10.2:5002/chatbot';
+      // const apiUrl = 'http://10.0.2.2:5002/chatbot';
 
       // Data to send in the POST request
       const postData = {
-        text: 'Hello, chatbot! How are you?',
+        text: spokenText,
       };
 
       // Make the POST request
-      axiosπ
+      axios
         .post(apiUrl, postData)
         .then(response => {
+          Tts.speak('Hello, this is a test of Text-to-Speech in React Native.');
+
           // Handle the response here
           console.log('API Response:', response.data);
         })
@@ -211,9 +235,7 @@ const VoiceScreen = ({navigation}) => {
     }
   };
   return (
-    <ImageBackground
-      style={{flex: 1}}
-      source={require('../assets/icons/loginback.png')}>
+    <ImageBackground style={{flex: 1}} source={backgroundImage}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
@@ -241,18 +263,178 @@ const VoiceScreen = ({navigation}) => {
               Hi, I’M Voxie
             </Text>
           </View>
-
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <Text>Recognized Text: {recognizedText}</Text>
             <TouchableOpacity
+              style={styles.buttonStyle}
               onPress={isListening ? stopListening : startListening}>
-              <Text>{isListening ? 'Stop Listening' : 'Start Listening'}</Text>
+              <Text style={styles.buttonTextStyle}>
+                {isListening ? 'Stop Listening' : 'Start Listening'}
+              </Text>
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={() => {
+              navigation.navigate('TimeManage');
+            }}>
+            <Text style={styles.buttonTextStyle}>TimeManage</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={() => {
+              navigation.navigate('Quiz');
+            }}>
+            <Text style={styles.buttonTextStyle}>Quiz</Text>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
       </ScrollView>
+      <View style={styles.bottomButtons}>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <Text style={styles.bottomButtonText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('Reminders');
+          }}>
+          <Text style={styles.bottomButtonText}>Reminders</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('More');
+          }}>
+          <Text style={styles.bottomButtonText}>Notes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('Help');
+          }}>
+          <Text style={styles.bottomButtonText}>Help</Text>
+        </TouchableOpacity>
+      </View>
     </ImageBackground>
   );
 };
 
 export default VoiceScreen;
+
+const styles = StyleSheet.create({
+  bottomButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  bottomButton: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 10,
+    padding: 10,
+    width: '25%', // Distribute equally among four buttons
+    alignItems: 'center',
+  },
+  bottomButtonText: {
+    color: COLORS.white,
+  },
+  centerFlex: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
+  buttonTextStyle2: {
+    color: COLORS.primary,
+    fontSize: 10,
+    fontWeight: 'bold',
+    textAlign: 'right',
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginLeft: SIZES.width * 0.3,
+  },
+  title: {
+    color: COLORS.primary,
+    fontSize: 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  rowFlex: {
+    flexDirection: 'row',
+    // flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginLeft: SIZES.width * 0.1,
+    alignContent: 'center',
+  },
+  mainBody: {
+    // backgroundColor: '#FAFAFA',
+    flex: 1,
+    // alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  SectionStyle: {
+    // backgroundColor: COLORS.secondary,
+    // borderColor: COLORS.white,
+    height: 40,
+    marginRight: 35,
+    margin: 10,
+  },
+  buttonStyle: {
+    backgroundColor: COLORS.primary,
+    borderWidth: 0,
+    marginTop: 50,
+    color: COLORS.black,
+    height: 40,
+    width: 130,
+    alignItems: 'center',
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
+  buttonTextStyle: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  inputStyle: {
+    borderWidth: 1,
+    borderRadius: 50,
+    flex: 1,
+    color: COLORS.black,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderColor: COLORS.black,
+    width: SIZES.width * 0.7,
+  },
+  inputStyleError: {
+    flex: 1,
+    color: COLORS.third,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'red',
+    paddingLeft: 15,
+    paddingRight: 15,
+    width: SIZES.width * 0.7,
+  },
+  registerTextStyle: {
+    color: '#4c5a5b',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 14,
+    alignSelf: 'center',
+    padding: 10,
+  },
+  errorTextStyle: {
+    color: 'red',
+    textAlign: 'right',
+    fontSize: 12,
+    fontWeight: 'bold',
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginLeft: SIZES.width * 0.05,
+  },
+});

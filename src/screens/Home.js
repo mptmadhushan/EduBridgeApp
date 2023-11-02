@@ -1,5 +1,4 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Image,
@@ -7,110 +6,145 @@ import {
   ImageBackground,
   Text,
   StyleSheet,
+  ScrollView, // Import ScrollView
 } from 'react-native';
-import {images, SIZES, COLORS, FONTS} from '../helpers';
+import { images, SIZES, COLORS, FONTS } from '../helpers';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
 
-export default function Home({navigation}) {
+export default function Home({ navigation }) {
   useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        colors={[COLORS.black, COLORS.secondary]}
-        style={styles.overlay}>
-        <Text style={styles.title1}>Dev User</Text>
-        <Text style={styles.des}>Dev User</Text>
-        <View
-          style={{
-            alignItems: 'center',
-            // marginTop: SIZES.height * 0.04,
-            // maxHeight: 50,
-          }}>
-          <Image
+      <ScrollView>
+        <LinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          colors={[COLORS.black, COLORS.secondary]}
+          style={styles.overlay}>
+          <Text style={styles.title1}>Dev User</Text>
+          <Text style={styles.des}>Dev User</Text>
+          <View
             style={{
-              width: 100,
-              maxHeight: 100,
-            }}
-            source={require('../assets/eduLogo.png')}
-          />
-        </View>
-      </LinearGradient>
+              alignItems: 'center',
+            }}>
+            <Image
+              style={{
+                width: 100,
+                maxHeight: 100,
+              }}
+              source={require('../assets/eduLogo.png')}
+            />
+          </View>
+        </LinearGradient>
 
-      <View style={styles.rowNorm}>
+        <View style={styles.rowNorm}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Voice')}
+            style={styles.slide1}>
+            <View style={styles.centerFlex}>
+              <Image
+                style={{
+                  width: 50,
+                  maxHeight: 50,
+                  resizeMode: 'contain',
+                }}
+                source={require('../assets/icons/sound.png')}
+              />
+              <Text style={styles.text001}>Voice</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('GameHome')}
+            style={styles.slide1}>
+            <View style={styles.centerFlex}>
+              <Image
+                style={{
+                  width: 50,
+                  maxHeight: 50,
+                  resizeMode: 'contain',
+                }}
+                source={require('../assets/icons/sound.png')}
+              />
+              <Text style={styles.text001}>Games</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.rowNorm}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PlantUpload')}
+            style={styles.slide1}>
+            <View style={styles.centerFlex}>
+              <Image
+                style={{
+                  width: 50,
+                  maxHeight: 50,
+                  resizeMode: 'contain',
+                }}
+                source={require('../assets/icons/sound.png')}
+              />
+              <Text style={styles.text001}>Gesture</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('EmotionReport')}
+            style={styles.slide1}>
+            <View style={styles.centerFlex}>
+              <Image
+                style={{
+                  width: 50,
+                  maxHeight: 50,
+                  resizeMode: 'contain',
+                }}
+                source={require('../assets/icons/sound.png')}
+              />
+              <Text style={styles.text001}>Emotion Report</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+
+      {/* Buttons at the bottom */}
+      <View style={styles.bottomButtons}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Voice')}
-          style={styles.slide1}>
-          <View style={styles.centerFlex}>
-            <Image
-              style={{
-                width: 50,
-                maxHeight: 50,
-                resizeMode: 'contain',
-              }}
-              source={require('../assets/icons/sound.png')}
-            />
-            <Text style={styles.text001}>Voice</Text>
-          </View>
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('Home')
+          }}>
+          <Text style={styles.bottomButtonText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('GameHome')}
-          style={styles.slide1}>
-          <View style={styles.centerFlex}>
-            <Image
-              style={{
-                width: 50,
-                maxHeight: 50,
-                resizeMode: 'contain',
-              }}
-              source={require('../assets/icons/sound.png')}
-            />
-            <Text style={styles.text001}>Games</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.rowNorm}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('PlantUpload')}
-          style={styles.slide1}>
-          <View style={styles.centerFlex}>
-            <Image
-              style={{
-                width: 50,
-                maxHeight: 50,
-                resizeMode: 'contain',
-              }}
-              source={require('../assets/icons/sound.png')}
-            />
-            <Text style={styles.text001}>Gesture</Text>
-          </View>
+          style={styles.bottomButton}
+          onPress={() => {
+           navigation.navigate('Reminders')
+          }}>
+          <Text style={styles.bottomButtonText}>Reminders</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('More')}
-          style={styles.slide1}>
-          <View style={styles.centerFlex}>
-            <Image
-              style={{
-                width: 50,
-                maxHeight: 50,
-                resizeMode: 'contain',
-              }}
-              source={require('../assets/icons/sound.png')}
-            />
-            <Text style={styles.text001}>Emotion Report</Text>
-          </View>
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('More')
+
+          }}>
+          <Text style={styles.bottomButtonText}>Notes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('Home')
+
+          }}>
+          <Text style={styles.bottomButtonText}>Help</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: COLORS.white},
+  container: { flex: 1, backgroundColor: COLORS.white },
   slide1: {
-    // backgroundColor: COLORS.primary,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -122,12 +156,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-  },
-  title2: {
-    color: COLORS.white,
-    fontWeight: 'bold',
-    marginLeft: SIZES.width * 0.06,
-    fontSize: 25,
   },
   text001: {
     color: COLORS.black,
@@ -152,7 +180,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexWrap: 'wrap',
     maxWidth: SIZES.width,
-    // marginLeft: SIZES.width * 0.06,
-    // marginRight: SIZES.width * 0.06,
+  },
+  // Bottom button styles
+  bottomButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  bottomButton: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 10,
+    padding: 10,
+    width: '25%',// Distribute equally among four buttons
+    alignItems: 'center',
+  },
+  bottomButtonText: {
+    color: COLORS.white,
   },
 });

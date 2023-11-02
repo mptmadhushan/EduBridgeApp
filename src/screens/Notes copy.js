@@ -7,8 +7,9 @@ import {
   ImageBackground,ScrollView
 } from 'react-native';
 import {icons, images, SIZES, COLORS, FONTS} from '../helpers';
+import BottomTabsView from '../components/bottomTabs';
 import LinearGradient from 'react-native-linear-gradient';
-export default function OnBoard({navigation, route}) {
+export default function MoreInfo({navigation, route}) {
   // const {resData} = route.params;
   const result = {
     symptoms: [
@@ -74,13 +75,36 @@ export default function OnBoard({navigation, route}) {
 
 
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Home');
-          }}
-          style={styles.btn}>
-          <Text style={styles.btnText}>Home</Text>
-        </TouchableOpacity>
+        <View style={styles.bottomButtons}>
+      <TouchableOpacity
+        style={styles.bottomButton}
+        onPress={() => {
+          navigation.navigate('Home');
+        }}>
+        <Text style={styles.bottomButtonText}>Home</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.bottomButton}
+        onPress={() => {
+          navigation.navigate('Reminders');
+        }}>
+        <Text style={styles.bottomButtonText}>Reminders</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.bottomButton}
+        onPress={() => {
+          navigation.navigate('More');
+        }}>
+        <Text style={styles.bottomButtonText}>Notes</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.bottomButton}
+        onPress={() => {
+          navigation.navigate('Home');
+        }}>
+        <Text style={styles.bottomButtonText}>Help</Text>
+      </TouchableOpacity>
+    </View>
     </View>
   );
 }
@@ -96,6 +120,21 @@ const styles = StyleSheet.create({
     marginBottom:100,
     padding:30
 
+  },
+  bottomButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  bottomButton: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 10,
+    padding: 10,
+    width: '25%',// Distribute equally among four buttons
+    alignItems: 'center',
+  },
+  bottomButtonText: {
+    color: COLORS.white,
   },
   btn: {
     backgroundColor: COLORS.primary,

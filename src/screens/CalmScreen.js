@@ -1,135 +1,142 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Text,Image,
-  ImageBackground,ScrollView,FlatList
+  Text,
+  Image,
+  ScrollView,
 } from 'react-native';
 import Video from 'react-native-video';
-import {icons, images, SIZES, COLORS, FONTS} from '../helpers';
+import { icons, images, SIZES, COLORS, FONTS } from '../helpers';
 import LinearGradient from 'react-native-linear-gradient';
-export default function OnBoard({navigation, route}) {
-  // const {resData} = route.params;
-  const result = {
-    symptoms: [
-      '•Quis adipisicing quis ut veniam ad occaecat laboris esse exercitation proident.',
-     
-     'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',,
-     'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',
-     'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.','•Quis adipisicing quis ut veniam ad occaecat laboris esse exercitation proident.',
-     
-     'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',,
-     'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',
-     'Cupidatat reprehenderit non commodo cupidatat elit tempor officia voluptate.',
-    ],
-    solutions: [
-      'Aute dolore consectetur dolore',
-      ' ut excepteur officia et commodo do.',
-    ],
+import Youtube from '../components/Youtube';
+
+export default function OnBoard({ navigation, route }) {
+  const [currentVideoId, setCurrentVideoId] = useState(null);
+
+  const videoData = [
+    { title: 'Video 1', videoId: 'OYA-dtPXQL8' },
+    { title: 'Video 2', videoId: 'ZppkntzMD3U' },
+    { title: 'Video 3', videoId: 'S8tZN-EW6Xk' },
+    { title: 'Video 4', videoId: 'AI_aWUOdo8Y' },
+    { title: 'Video 5', videoId: 'zSPxMJH-RSs' },
+  ];
+
+  const playVideo = (videoId) => {
+    setCurrentVideoId(videoId);
   };
 
+  const stopVideo = () => {
+    setCurrentVideoId(null);
+  };
 
-const videoData = [
-  {
-    id: 1,
-    source: require('../assets/clam.mp4'),
-  }, {
-    id: 2,
-    source: require('../assets/clam.mp4'),
-  },
-  // {
-  //   id: 2,
-  //   source: require('../assets/clam01.MP4'),
-  // },
-  // Add more video objects as needed
-];
-  // const result = resData.result.detail;
-  // console.log('hello from res', resData);
-  console.log(result);
-  const api = {foo: 'bar', foz: 'baz'};
   return (
-    <View
-      style={styles.container}
-      source={require('../assets/cocoOnb.jpg')}>
+    <View style={styles.container}>
       <LinearGradient
-      start={{x: 0, y: 0}} end={{x: 1, y: 0}} 
-        colors={[COLORS.black, COLORS.secondary,]}
-        style={styles.overlay}>
-        {/* <Text style={styles.title1}>
-          "Protect your Palms: Uncovering Cocon+ut Diseases to Preserve Your
-          Paradise."
-        </Text> */}
-        <View
-          style={{
-            alignItems: 'center',
-            // marginTop: SIZES.height * 0.04,
-            // maxHeight: 50,
-          }}>
-                 <Text style={styles.title}>Calm You</Text>
-
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        colors={[COLORS.black, COLORS.secondary]}
+        style={styles.overlay}
+      >
+        <View style={{
+          alignItems: 'center',
+        }}>
+          <Text style={styles.title}>Calm You</Text>
         </View>
       </LinearGradient>
-      {/* <FlatList
-        data={videoData}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Video
 
-          fullscreen={true}
-          paused={true}
-            source={item.source}
-            style={styles.video}
-            controls={true}
-            resizeMode="cover"
-          />
+      <ScrollView>
+        {videoData.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.card}
+            onPress={() => playVideo(item.videoId)}
+          >
+            <Text style={styles.cardTitle}>{item.title}</Text>
+          </TouchableOpacity>
+        ))}
+
+        {currentVideoId && (
+          <Youtube VideoId={currentVideoId} onClose={stopVideo} />
         )}
-      /> */}
-      <ScrollView >
-        <View style={{alignItems: 'center', paddingHorizontal: 20}}>
-          {videoData &&
-            videoData.map(list => (
-              <Video
-
-              paused={true}
-                source={list.source}
-                style={styles.video}
-                controls={true}
-                resizeMode="cover"
-              />
-            ))}
-        
-        </View>
-
-
-        </ScrollView>
+      </ScrollView>
+      <View style={styles.bottomButtons}>
         <TouchableOpacity
+          style={styles.bottomButton}
           onPress={() => {
             navigation.navigate('Home');
           }}
-          style={styles.btn}>
-          <Text style={styles.btnText}>Home</Text>
+        >
+          <Text style={styles.bottomButtonText}>Home</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('Reminders');
+          }}
+        >
+          <Text style={styles.bottomButtonText}>Reminders</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('More');
+          }}
+        >
+          <Text style={styles.bottomButtonText}>Notes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.bottomButton}
+          onPress={() => {
+            navigation.navigate('Help');
+          }}
+        >
+          <Text style={styles.bottomButtonText}>Help</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
+  bottomButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  bottomButton: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 10,
+    padding: 10,
+    width: '25%', // Distribute equally among four buttons
+    alignItems: 'center',
+  },
+  bottomButtonText: {
+    color: COLORS.white,
+  },
   container: {
     height: SIZES.height,
     flex: 1,
-  },
-  video: {
-    flex: 1,
-    width:SIZES.width,
-    height:500
   },
   overlay: {
     alignItems: 'center',
     justifyContent: 'center',
     height: SIZES.height * 0.25,
-    marginBottom:100,
-    padding:30
-
+    marginBottom: 100,
+    padding: 30,
+  },
+  card: {
+    backgroundColor: COLORS.white,
+    height: 40,
+    width: 200,
+    borderRadius: 20,
+    margin: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardTitle: {
+    color: COLORS.black,
   },
   btn: {
     backgroundColor: COLORS.primary,
@@ -159,25 +166,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20,
     fontWeight: 'bold',
-  },
-  des: {
-    color: COLORS.black,
-    fontSize: 15,
-    textAlign: 'center',
-    paddingHorizontal: 20,
-    borderRadius: 50,
-    margin: 5,
-    padding: 5,
-    fontWeight: 'bold',
-    marginTop: 10,
-    backgroundColor: 'white',
-  },
-  title2: {
-    // marginTop: SIZES.height * 0.1,
-    color: COLORS.white,
-    fontWeight: 'bold',
-    fontSize: 30,
-    textAlign: 'center',
-    marginBottom: 10,
   },
 });

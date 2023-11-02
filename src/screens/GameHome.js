@@ -12,7 +12,7 @@ import {images, SIZES, COLORS, FONTS} from '../helpers';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
 
-export default function Home({navigation}) {
+export default function GameHome({navigation}) {
   useEffect(() => {}, []);
 
   return (

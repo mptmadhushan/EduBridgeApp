@@ -1,5 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Alert,
+} from 'react-native';
+import { RNCamera } from 'react-native-camera';
+import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 const shuffleArray = (array) => {
   let shuffledArray = [...array];
@@ -28,10 +38,13 @@ const MemoryGame = () => {
   const [timer, setTimer] = useState(0);
   const [score, setScore] = useState(0);
 
+  const camera = useRef(null);
+
   useEffect(() => {
     const timerInterval = setInterval(() => {
       setTimer((prevTimer) => prevTimer + 1);
-    }, 1000);
+      takePhoto(); // Capture and send a photo to the API every 10 seconds
+    }, 10000);
 
     return () => clearInterval(timerInterval);
   }, []);
@@ -52,7 +65,9 @@ const MemoryGame = () => {
   useEffect(() => {
     if (matched.length === initialCards.length) {
       // Game over logic
-      Alert.alert('Game Over', `Your score is ${score}`, [{ text: 'Restart', onPress: resetGame }]);
+      Alert.alert('Game Over', `Your score is ${score}`, [
+        { text: 'Restart', onPress: resetGame },
+      ]);
     }
   }, [matched]);
 
@@ -62,6 +77,86 @@ const MemoryGame = () => {
     setMatched([]);
     setTimer(0);
     setScore(0);
+  };
+
+  const takePhoto = async () => {
+    if (camera.current) {
+      try {
+        const options = { quality: 0.5, base64: false, forceUpOrientation: true };
+        await camera.current.pausePreview(); // Stop the camera preview
+        await camera.current.resumePreview(); // Restart the camera preview
+        const data = await camera.current.takePictureAsync(options);
+        console.log('Captured photo:', data.uri);
+  
+        // Send the captured photo as a file to the API
+        sendPhotoToAPI(data.uri);
+      } catch (error) {
+        console.error('Error taking photo:', error);
+      }
+    }
+  };
+
+  const sendPhotoToAPI = async (imageUri) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', {
+        uri: imageUri,
+        type: 'image/jpeg',
+        name: 'photo.jpg',
+      });
+  
+      // Make an API call to send the image as a file
+      const response = await axios.post(
+        'http://10.0.2.2:5002/detect_emotion',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+  
+      // Define emotion labels
+      const emotionLabels = {
+        // '-1': 'Disgust',
+        0: 'Angry',
+        1: 'Disgust',
+        2: 'Fear',
+        3: 'Happy',
+        4: 'Sad',
+        5: 'Surprise',
+        6: 'Neutral',
+      };
+  
+      // Extract emotion from the API response
+      const emotionValue = response.data.emotion;
+      console.log("🚀 ~ file: Game.js:133 ~ sendPhotoToAPI ~ response.data.emotion:", response.data.emotion)
+      const emotionLabel = emotionLabels[emotionValue];
+  
+      if (emotionLabel) {
+        // Load the existing emotion counts from AsyncStorage
+        AsyncStorage.getItem('emotionCounts')
+          .then((storedCounts) => {
+            const emotionCounts = storedCounts ? JSON.parse(storedCounts) : {};
+            emotionCounts[emotionLabel] = (emotionCounts[emotionLabel] || 0) + 1;
+            console.log("🚀 ~ file: Game.js:140 ~ .then ~ emotionCounts:", emotionCounts)
+  
+            // Store the updated emotion counts in AsyncStorage
+            AsyncStorage.setItem('emotionCounts', JSON.stringify(emotionCounts))
+              .then(() => {
+                console.log('Emotion counts stored in AsyncStorage:', emotionCounts);
+              })
+              .catch((error) => {
+                console.error('Error storing emotion counts:', error);
+              });
+          })
+          .catch((error) => {
+            console.error('Error loading emotion counts:', error);
+          });
+      }
+    } catch (error) {
+      console.error('Error calling API:', error);
+    }
   };
 
   const handleCardPress = (card) => {
@@ -97,6 +192,11 @@ const MemoryGame = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderCard}
       />
+      <RNCamera
+        ref={camera}
+        style={styles.camera}
+        type={RNCamera.Constants.Type.front}
+      />
     </View>
   );
 };
@@ -127,6 +227,11 @@ const styles = StyleSheet.create({
   score: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  camera: {
+    // flex: 1,
+    width: 1,
+    height:1
   },
 });
 

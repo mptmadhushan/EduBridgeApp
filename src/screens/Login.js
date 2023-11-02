@@ -63,8 +63,8 @@ const LoginScreen = ({navigation}) => {
       .signInWithEmailAndPassword(username, password)
       .then((res) => {
       console.log("🚀 ~ file: Login.js:65 ~ .then ~ res:", res)
-    navigation.navigate('Home');
-
+      navigation.navigate('Home');
+      AsyncStorage.setItem('user', JSON.stringify(res));
         console.log('User registered successfully!')
 
         })

@@ -12,24 +12,19 @@ import {images, SIZES, COLORS, FONTS} from '../helpers';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
 
-export default function Home({navigation}) {
+export default function GameList({navigation}) {
   useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
       <LinearGradient
-      start={{x: 0, y: 0}} end={{x: 1, y: 0}} 
-        colors={[COLORS.black, COLORS.secondary,]}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        colors={[COLORS.black, COLORS.secondary]}
         style={styles.overlay}>
-        {/* <Text style={styles.title1}>
-          "Protect your Palms: Uncovering Coconut Diseases to Preserve Your
-          Paradise."
-        </Text> */}
         <View
           style={{
             alignItems: 'center',
-            // marginTop: SIZES.height * 0.04,
-            // maxHeight: 50,
           }}>
           <Image
             style={{
@@ -41,43 +36,91 @@ export default function Home({navigation}) {
         </View>
       </LinearGradient>
 
-        <View style={styles.rowNorm}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Game')}
-            style={styles.slide1}>
-            <View style={styles.centerFlex}>
-              <Image
-                style={{
-                  width: 50,
-                  maxHeight: 50,
-                  resizeMode: 'contain',
-                }}
-                source={require('../assets/icons/sound.png')}
-              />
-              <Text style={styles.text001}>Memory Game</Text>
-            </View>
-          </TouchableOpacity>
-          
-        </View>
-        <View style={styles.rowNorm}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ColorGame')}
-            style={styles.slide1}>
-            <View style={styles.centerFlex}>
+      <View style={styles.rowNorm}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Game')}
+          style={styles.slide1}>
+          <View style={styles.centerFlex}>
             <Image
-          style={{
-            width: 50,
-            maxHeight: 50,
-            resizeMode: 'contain',
-          }}
-          source={require('../assets/icons/sound.png')}
-
-        />
-              <Text style={styles.text001}>Color Match</Text>
-            </View>
-          </TouchableOpacity>
-        
-        </View>
+              style={{
+                width: 50,
+                maxHeight: 50,
+                resizeMode: 'contain',
+              }}
+              source={require('../assets/icons/sound.png')}
+            />
+            <Text style={styles.text001}>Memory Game</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.rowNorm}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ColorGame')}
+          style={styles.slide1}>
+          <View style={styles.centerFlex}>
+            <Image
+              style={{
+                width: 50,
+                maxHeight: 50,
+                resizeMode: 'contain',
+              }}
+              source={require('../assets/icons/sound.png')}
+            />
+            <Text style={styles.text001}>Color Match</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.rowNorm}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('GameWeb1')}
+          style={styles.slide1}>
+          <View style={styles.centerFlex}>
+            <Image
+              style={{
+                width: 50,
+                maxHeight: 50,
+                resizeMode: 'contain',
+              }}
+              source={require('../assets/icons/sound.png')}
+            />
+            <Text style={styles.text001}>Game</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.rowNorm}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('GameWeb2')}
+          style={styles.slide1}>
+          <View style={styles.centerFlex}>
+            <Image
+              style={{
+                width: 50,
+                maxHeight: 50,
+                resizeMode: 'contain',
+              }}
+              source={require('../assets/icons/sound.png')}
+            />
+            <Text style={styles.text001}>Game</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.rowNorm}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('GameWeb3')}
+          style={styles.slide1}>
+          <View style={styles.centerFlex}>
+            <Image
+              style={{
+                width: 50,
+                maxHeight: 50,
+                resizeMode: 'contain',
+              }}
+              source={require('../assets/icons/sound.png')}
+            />
+            <Text style={styles.text001}>Game</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -111,9 +154,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: SIZES.height * 0.3,
-    marginBottom:100,
-    padding:30
-
+    marginBottom: 100,
+    padding: 30,
   },
   title1: {
     alignItems: 'center',
