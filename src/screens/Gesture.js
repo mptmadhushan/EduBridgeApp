@@ -34,7 +34,7 @@ const MainScreen = ({routes, navigation}) => {
         name: 'image.jpg',
       });
 
-      const apiUrl = 'http://10.0.2.2:5002/recognize_hand_post'; // Replace with your API endpoint URL
+      const apiUrl = 'https://3d5b-212-104-237-44.ngrok.io/recognize_hand_post'; // Replace with your API endpoint URL
 
       try {
         const response = await axios.post(apiUrl, formData);

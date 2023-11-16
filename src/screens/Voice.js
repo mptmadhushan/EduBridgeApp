@@ -80,7 +80,7 @@ const VoiceScreen = ({navigation}) => {
       const randomIndex = Math.floor(Math.random() * backgroundImages.length);
       setBackgroundImage(backgroundImages[randomIndex]);
     } else {
-      const apiUrl = 'http://172.20.10.2:5002/chatbot';
+      const apiUrl = 'https://3d5b-212-104-237-44.ngrok.io/chatbot';
       // const apiUrl = 'http://10.0.2.2:5002/chatbot';
 
       // Data to send in the POST request
@@ -115,7 +115,7 @@ const VoiceScreen = ({navigation}) => {
   };
 
   const stopListening = async () => {
-    const apiUrl = 'http://10.0.2.2:5002/chatbot';
+    const apiUrl = 'https://3d5b-212-104-237-44.ngrok.io/chatbot';
 
     // Data to send in the POST requestr
     const postData = {

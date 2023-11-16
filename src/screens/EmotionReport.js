@@ -95,7 +95,7 @@ export default function OnBoard({navigation}) {
 
       // Make an API call to send the image as a file
       const response = await axios.post(
-        'http://10.0.2.2:5002/detect_emotion',
+        'https://3d5b-212-104-237-44.ngrok.io/detect_emotion',
         formData,
         {
           headers: {
